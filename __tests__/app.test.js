@@ -46,6 +46,7 @@ describe("App", () => {
           const { articles } = body;
           expect(articles.length).toBe(12);
           expect(articles).toBeSorted({ key: "created_at" });
+          expect(articles[6].comment_count).toBe(11);
           articles.forEach((article) => {
             expect(article).toMatchObject({
               author: expect.any(String),
