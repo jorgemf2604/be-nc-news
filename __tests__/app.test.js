@@ -31,6 +31,7 @@ describe("App", () => {
               slug: expect.any(String),
               description: expect.any(String),
             });
+            expect(topics.length).toBe(3);
           });
         });
     });
