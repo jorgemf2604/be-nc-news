@@ -9,12 +9,16 @@ const {
   getAllArticles,
   getArticleById,
 } = require("./controllers/articles-controller.js");
+const {
+  getCommentsByArticleId,
+} = require("./controllers/comments-controller.js");
 
 const app = express();
 
 app.get("/api/topics", getAllTopics);
 app.get("/api/articles", getAllArticles);
 app.get("/api/articles/:articleId", getArticleById);
+app.get("/api/articles/:articleId/comments", getCommentsByArticleId);
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Path not found!" });

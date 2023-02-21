@@ -107,4 +107,66 @@ describe("App", () => {
         });
     });
   });
+
+  describe("GET /api/articles/:articleId/comments", () => {
+    // Happy path
+    it("Should receive a 200 status code and a response object with a key of comments and an array of comments as value", () => {
+      return request(app)
+        .get("/api/articles/3/comments")
+        .expect(200)
+        .then(({ body }) => {
+          const { comments } = body;
+          expect(comments.length).toBe(2);
+          expect(comments[0].body).toBe("Ambidextrous marsupial");
+          expect(comments).toBeSortedBy("created_at", { descending: true });
+          comments.forEach((comment) => {
+            expect(comment).toMatchObject({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              article_id: expect.any(Number),
+            });
+          });
+        });
+    });
+    // Empty happyy path (valid article ID but not comments)
+    it("Should recieve a 200 status code and a response object with a key of comments and an empty array as value if there are no comments", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then(({ body }) => {
+          const { comments } = body;
+          expect(comments.length).toBe(0);
+          expect(body).toEqual({ comments: [] });
+        });
+    });
+    // 400 - Invalid input
+    it("Should receive a 400 status code and a response object with a key of msg and the string 'Invalid input' as value when an invalid input is passed", () => {
+      return request(app)
+        .get("/api/articles/One/comments")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input");
+          expect(body).toEqual({ msg: "Invalid input" });
+        });
+    });
+    // 404 - Article not found (invalid article Id)
+    it("Should receive a 404 status code and a response object with a key of msg and the string 'Article not found' as value when an invalid article id is passed", () => {
+      return request(app)
+        .get("/api/articles/1123123123/comments")
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe(
+            "Could not fetch comments. Article id provided not found"
+          );
+          expect(body).toEqual({
+            msg: "Could not fetch comments. Article id provided not found",
+          });
+        });
+    });
+  });
 });
