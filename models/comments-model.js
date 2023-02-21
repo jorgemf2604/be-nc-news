@@ -1,17 +1,66 @@
 const db = require("../db/connection.js");
 
-const fetcharticlesIds = () => {
+exports.fetcharticlesIds = () => {
   return db.query("Select article_id FROM articles;");
 };
 
-const fetchCommentsByArticleId = (id) => {
+exports.fetchCommentsByArticleId = (id) => {
   return db.query(
     "SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;",
     [id]
   );
 };
 
-module.exports = {
-  fetchCommentsByArticleId,
-  fetcharticlesIds,
+exports.insertCommentOnArticle = async (id, username, body) => {
+  const articleIdIsValid = await checkArticleIdIsValid(id);
+  const usernameIsValid = await checkUsernameIsValid(username);
+
+  if (!usernameIsValid) {
+    return Promise.reject({
+      status: 404,
+      msg: `We could not find username ${username}`,
+    });
+  }
+
+  if (!articleIdIsValid) {
+    return Promise.reject({
+      status: 404,
+      msg: `We could not find the article id ${id}`,
+    });
+  }
+
+  if (body === undefined) {
+    return Promise.reject({
+      status: 400,
+      msg: "No body key provided in the body of the request",
+    });
+  }
+
+  if (username === undefined) {
+    return Promise.reject({
+      status: 400,
+      msg: "No username key provided in the body of the request",
+    });
+  }
+
+  const response = await db.query(
+    "INSERT INTO comments (author, article_id, body) VALUES ($1, $2, $3) RETURNING *;",
+    [username, id, body]
+  );
+
+  return response.rows;
+};
+
+const checkArticleIdIsValid = (articleId) => {
+  return db
+    .query("SELECT * FROM articles WHERE articles.article_id=$1", [articleId])
+    .then((response) => response.rows)
+    .then((articles) => !(articles.length === 0));
+};
+
+const checkUsernameIsValid = (username) => {
+  return db
+    .query("SELECT * FROM users WHERE username=$1;", [username])
+    .then((response) => response.rows)
+    .then((usernames) => !(usernames.length === 0));
 };

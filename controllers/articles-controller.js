@@ -14,8 +14,8 @@ const getAllArticles = (req, res, next) => {
 };
 
 const getArticleById = (req, res, next) => {
-  const { articleId } = req.params;
-  fetchArticleById(articleId)
+  const { article_id } = req.params;
+  fetchArticleById(article_id)
     .then((article) => {
       res.status(200).send({ article });
     })

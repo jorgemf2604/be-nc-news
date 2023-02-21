@@ -63,7 +63,7 @@ describe("App", () => {
     });
   });
 
-  describe("GET /api/articles/:articleId", () => {
+  describe("GET /api/articles/:article_id", () => {
     // Happy path
     it("Should receive a 200 status code and an object with a key of articles and the specified article as value", () => {
       return request(app)
@@ -108,7 +108,7 @@ describe("App", () => {
     });
   });
 
-  describe("GET /api/articles/:articleId/comments", () => {
+  describe("GET /api/articles/:article_id/comments", () => {
     // Happy path
     it("Should receive a 200 status code and a response object with a key of comments and an array of comments as value", () => {
       return request(app)
@@ -168,5 +168,16 @@ describe("App", () => {
           });
         });
     });
+  });
+
+  describe("POST - /api/articles/:article_id/comments", () => {
+    // HAPPY PATH 200 - Inserts comment on the article Id,
+    // Happy PATH 200 - Returns inserted object
+    // EMPTY HAPPY PATH 200 - Returns {comments: []} if the article id is valid but there are no comments
+    // 400 - Invalid input
+    // 400 - Username not provided in the request object
+    // 400 - Body not provided in the request object
+    // 404 - username not found
+    // 404 - article not found
   });
 });
