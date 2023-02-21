@@ -12,22 +12,22 @@ exports.fetchCommentsByArticleId = (id) => {
 };
 
 exports.insertCommentOnArticle = async (id, username, body) => {
-  const articleIdIsValid = await checkArticleIdIsValid(id);
-  const usernameIsValid = await checkUsernameIsValid(username);
+  // const articleIdIsValid = await checkArticleIdIsValid(id);
+  // const usernameIsValid = await checkUsernameIsValid(username);
 
-  if (!usernameIsValid) {
-    return Promise.reject({
-      status: 404,
-      msg: `We could not find username`,
-    });
-  }
+  // if (!usernameIsValid) {
+  //   return Promise.reject({
+  //     status: 404,
+  //     msg: `We could not find username`,
+  //   });
+  // }
 
-  if (!articleIdIsValid) {
-    return Promise.reject({
-      status: 404,
-      msg: `We could not find the article id`,
-    });
-  }
+  // if (!articleIdIsValid) {
+  //   return Promise.reject({
+  //     status: 404,
+  //     msg: `We could not find the article id`,
+  //   });
+  // }
 
   if (body === undefined || username == undefined) {
     return Promise.reject({
@@ -36,12 +36,14 @@ exports.insertCommentOnArticle = async (id, username, body) => {
     });
   }
 
+  // if
+
   const response = await db.query(
     "INSERT INTO comments (author, article_id, body) VALUES ($1, $2, $3) RETURNING *;",
     [username, id, body]
   );
 
-  return response.rows;
+  return response.rows[0];
 };
 
 const checkArticleIdIsValid = (articleId) => {

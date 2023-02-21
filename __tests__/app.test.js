@@ -87,7 +87,7 @@ describe("App", () => {
         });
     });
     // 400 - Invalid input
-    it("Should receive a 400 status code and an object with a key of msg and the string 'Invalid input as value'", () => {
+    it("Should receive a 400 status code and an object with a key of msg and the string 'Invalid input as' value", () => {
       return request(app)
         .get("/api/articles/one")
         .expect(400)
@@ -206,39 +206,38 @@ describe("App", () => {
           );
         });
     });
-    // // 400 - Invalid input. No username provided
-    // it("Returns a 400 status code and a response object with a key of msg and a string 'No username key provided in the body of the request' as value", () => {
-    //   return request(app)
-    //     .post("/api/articles/4/comments")
-    //     .send({ body: "This is a new comment" })
-    //     .expect(400)
-    //     .then(({ body }) => {
-    //       const { msg } = body;
-    //       expect(msg).toBe(
-    //         "No username key provided in the body of the request"
-    //       );
-    //     });
-    // });
+    // 400 - Invalid
+    it("Returns a 400 status code and a response object with a key of msg and a string 'Invalid input'", () => {
+      return request(app)
+        .post("/api/articles/monkey/comments")
+        .send({ username: "butter_bridge", body: "This is a new comment" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input");
+        });
+    });
+
     // 404 - username not found
-    it("Returns a 404 status code and a response object with a key of msg and a string 'We could not find username' as value", () => {
+    it("Returns a 404 status code and a response object with a key of msg and a string 'Not found' as value when enter a wrong username", () => {
       return request(app)
         .post("/api/articles/4/comments")
         .send({ username: "Jorge", body: "This is a new comment" })
         .expect(404)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("We could not find username");
+          expect(msg).toBe("Not found");
         });
     });
     // 404 - article not found
-    it("Returns a 404 status code and a response object with a key of msg and a string 'We could not find the article id' as value", () => {
+    it("Returns a 404 status code and a response object with a key of msg and a string 'Not found' as value when the entered a valid but wrong article ID", () => {
       return request(app)
         .post("/api/articles/4234234/comments")
         .send({ username: "butter_bridge", body: "This is a new comment" })
         .expect(404)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("We could not find the article id");
+          expect(msg).toBe("Not found");
         });
     });
   });

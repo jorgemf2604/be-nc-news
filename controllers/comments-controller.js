@@ -41,7 +41,7 @@ const postCommentOnArticle = (req, res, next) => {
 
   insertCommentOnArticle(article_id, username, body)
     .then((commentPosted) => {
-      res.status(201).send({ comment: commentPosted[0] });
+      res.status(201).send({ comment: commentPosted });
     })
     .catch((error) => {
       next(error);
