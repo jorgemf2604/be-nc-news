@@ -17,7 +17,7 @@ const getArticleById = (req, res, next) => {
   const { articleId } = req.params;
   fetchArticleById(articleId)
     .then((article) => {
-      res.status(200).send({ articles: [article] });
+      res.status(200).send({ article });
     })
     .catch((error) => {
       next(error);

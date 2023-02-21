@@ -70,9 +70,7 @@ describe("App", () => {
         .get("/api/articles/3")
         .expect(200)
         .then(({ body }) => {
-          const { articles } = body;
-          const article = articles[0];
-          expect(articles.length).toBe(1);
+          const { article } = body;
           expect(article.title).toBe("Eight pug gifs that remind me of mitch");
           expect(article.article_id).toBe(3);
           expect(article.author).toBe("icellusedkars");
