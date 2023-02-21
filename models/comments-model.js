@@ -18,28 +18,21 @@ exports.insertCommentOnArticle = async (id, username, body) => {
   if (!usernameIsValid) {
     return Promise.reject({
       status: 404,
-      msg: `We could not find username ${username}`,
+      msg: `We could not find username`,
     });
   }
 
   if (!articleIdIsValid) {
     return Promise.reject({
       status: 404,
-      msg: `We could not find the article id ${id}`,
+      msg: `We could not find the article id`,
     });
   }
 
-  if (body === undefined) {
+  if (body === undefined || username == undefined) {
     return Promise.reject({
       status: 400,
-      msg: "No body key provided in the body of the request",
-    });
-  }
-
-  if (username === undefined) {
-    return Promise.reject({
-      status: 400,
-      msg: "No username key provided in the body of the request",
+      msg: "No body or username key provided in the body of the request",
     });
   }
 

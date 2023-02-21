@@ -171,13 +171,75 @@ describe("App", () => {
   });
 
   describe("POST - /api/articles/:article_id/comments", () => {
-    // HAPPY PATH 200 - Inserts comment on the article Id,
-    // Happy PATH 200 - Returns inserted object
-    // EMPTY HAPPY PATH 200 - Returns {comments: []} if the article id is valid but there are no comments
-    // 400 - Invalid input
-    // 400 - Username not provided in the request object
-    // 400 - Body not provided in the request object
+    // Happy PATH 201 - Returns inserted object
+    it("Returns a 201 status code and a response object with a key of comment and the comment object that has been inserted", () => {
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send({ username: "butter_bridge", body: "This is a new comment" })
+        .expect(201)
+        .then(({ body }) => {
+          const { comment } = body;
+          expect(comment.article_id).toBe(2);
+          expect(comment.body).toBe("This is a new comment");
+          expect(comment.author).toBe("butter_bridge");
+          expect(comment.comment_id).toBe(19);
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+          });
+        });
+    });
+    // 400 - Invalid input. No body provided.
+    it("Returns a 400 status code and a response object with a key of msg and a string 'No body or username key provided in the body of the request' as value", () => {
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send({ username: "butter_bridge" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe(
+            "No body or username key provided in the body of the request"
+          );
+        });
+    });
+    // // 400 - Invalid input. No username provided
+    // it("Returns a 400 status code and a response object with a key of msg and a string 'No username key provided in the body of the request' as value", () => {
+    //   return request(app)
+    //     .post("/api/articles/4/comments")
+    //     .send({ body: "This is a new comment" })
+    //     .expect(400)
+    //     .then(({ body }) => {
+    //       const { msg } = body;
+    //       expect(msg).toBe(
+    //         "No username key provided in the body of the request"
+    //       );
+    //     });
+    // });
     // 404 - username not found
+    it("Returns a 404 status code and a response object with a key of msg and a string 'We could not find username' as value", () => {
+      return request(app)
+        .post("/api/articles/4/comments")
+        .send({ username: "Jorge", body: "This is a new comment" })
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("We could not find username");
+        });
+    });
     // 404 - article not found
+    it("Returns a 404 status code and a response object with a key of msg and a string 'We could not find the article id' as value", () => {
+      return request(app)
+        .post("/api/articles/4234234/comments")
+        .send({ username: "butter_bridge", body: "This is a new comment" })
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("We could not find the article id");
+        });
+    });
   });
 });
