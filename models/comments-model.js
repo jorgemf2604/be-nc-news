@@ -11,7 +11,7 @@ exports.fetchCommentsByArticleId = (id) => {
   );
 };
 
-exports.insertCommentOnArticle = async (id, username, body) => {
+exports.insertCommentOnArticle = (id, username, body) => {
   if (body === undefined || username == undefined) {
     return Promise.reject({
       status: 400,
@@ -19,10 +19,10 @@ exports.insertCommentOnArticle = async (id, username, body) => {
     });
   }
 
-  const response = await db.query(
-    "INSERT INTO comments (author, article_id, body) VALUES ($1, $2, $3) RETURNING *;",
-    [username, id, body]
-  );
-
-  return response.rows[0];
+  return db
+    .query(
+      "INSERT INTO comments (author, article_id, body) VALUES ($1, $2, $3) RETURNING *;",
+      [username, id, body]
+    )
+    .then((response) => response.rows[0]);
 };
