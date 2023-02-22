@@ -241,4 +241,70 @@ describe("App", () => {
         });
     });
   });
+  describe("PATCH /api/articles/:article_id", () => {
+    // Happy path
+    it("Should receive a 200 status and an object with an article key the modified object as value", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: 10 })
+        .expect(200)
+        .then(({ body }) => {
+          const { article } = body;
+          expect(article.title).toBe("Living in the shadow of a great man");
+          expect(article.votes).toBe(110);
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            body: expect.any(String),
+          });
+        });
+    });
+    // 400 - Bad request - Invalid input
+    it("Should receive a 400 status and an object with an msg key and the string 'Invalid input'  as value", () => {
+      return request(app)
+        .patch("/api/articles/papaya")
+        .send({ inc_votes: 10 })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input");
+        });
+    });
+    // 404 - Not found article
+    it("Should receive a 404 status and an object with an msg key and the string 'Article not found'  as value", () => {
+      return request(app)
+        .patch("/api/articles/42342")
+        .send({ inc_votes: 10 })
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Article not found");
+        });
+    });
+    it("400 - Bad request: e.g. no inc_votes on body request. It should respond with a object with msg key and value 'Invalid input' ", () => {
+      return request(app)
+        .patch("/api/articles/2")
+        .send({})
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input. Votes is a not null key");
+        });
+    });
+    it("400 - Bad request: invalid inc_votes {inc_votes: 'cat'} should respond with a object with msg key and value 'Invalid input' ", () => {
+      return request(app)
+        .patch("/api/articles/2")
+        .send({ inc_votes: "cats" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input");
+        });
+    });
+  });
 });

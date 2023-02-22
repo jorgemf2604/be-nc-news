@@ -1,6 +1,7 @@
 const {
   fetchAllArticles,
   fetchArticleById,
+  modifyArticle,
 } = require("../models/articles-model.js");
 
 const getAllArticles = (req, res, next) => {
@@ -24,7 +25,20 @@ const getArticleById = (req, res, next) => {
     });
 };
 
+const patchArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+  modifyArticle(article_id, inc_votes)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
 module.exports = {
   getAllArticles,
   getArticleById,
+  patchArticle,
 };
