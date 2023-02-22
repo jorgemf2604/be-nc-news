@@ -307,4 +307,23 @@ describe("App", () => {
         });
     });
   });
+  describe("GET /api/users", () => {
+    it("Should receive a 200 status and an object with a users key and an array of object users as value.", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body }) => {
+          const { users } = body;
+          expect(users.length).toBe(4);
+          expect(users[2].name).toBe("paul");
+          users.forEach((user) => {
+            expect(user).toMatchObject({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            });
+          });
+        });
+    });
+  });
 });
