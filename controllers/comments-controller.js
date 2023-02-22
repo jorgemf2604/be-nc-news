@@ -1,11 +1,12 @@
 const {
   fetchCommentsByArticleId,
   fetcharticlesIds,
+  insertCommentOnArticle,
 } = require("../models/comments-model.js");
 
 const getCommentsByArticleId = (req, res, next) => {
-  const { articleId } = req.params;
-  const promiseFilteredComments = fetchCommentsByArticleId(articleId);
+  const { article_id } = req.params;
+  const promiseFilteredComments = fetchCommentsByArticleId(article_id);
   const promiseArticlesIds = fetcharticlesIds();
   Promise.all([promiseFilteredComments, promiseArticlesIds])
     .then((result) => {
@@ -13,7 +14,7 @@ const getCommentsByArticleId = (req, res, next) => {
       const { rows: filteredComments } = result1;
       const { rows: articlesIds } = result2;
       const idInIdsArray = articlesIds.some(
-        (article) => article.article_id === Number(articleId)
+        (article) => article.article_id === Number(article_id)
       );
 
       if (filteredComments.length === 0 && !idInIdsArray) {
@@ -34,6 +35,20 @@ const getCommentsByArticleId = (req, res, next) => {
     });
 };
 
+const postCommentOnArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+
+  insertCommentOnArticle(article_id, username, body)
+    .then((commentPosted) => {
+      res.status(201).send({ comment: commentPosted });
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
 module.exports = {
   getCommentsByArticleId,
+  postCommentOnArticle,
 };

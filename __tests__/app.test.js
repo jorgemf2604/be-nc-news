@@ -63,7 +63,7 @@ describe("App", () => {
     });
   });
 
-  describe("GET /api/articles/:articleId", () => {
+  describe("GET /api/articles/:article_id", () => {
     // Happy path
     it("Should receive a 200 status code and an object with a key of articles and the specified article as value", () => {
       return request(app)
@@ -87,7 +87,7 @@ describe("App", () => {
         });
     });
     // 400 - Invalid input
-    it("Should receive a 400 status code and an object with a key of msg and the string 'Invalid input as value'", () => {
+    it("Should receive a 400 status code and an object with a key of msg and the string 'Invalid input as' value", () => {
       return request(app)
         .get("/api/articles/one")
         .expect(400)
@@ -108,7 +108,7 @@ describe("App", () => {
     });
   });
 
-  describe("GET /api/articles/:articleId/comments", () => {
+  describe("GET /api/articles/:article_id/comments", () => {
     // Happy path
     it("Should receive a 200 status code and a response object with a key of comments and an array of comments as value", () => {
       return request(app)
@@ -166,6 +166,78 @@ describe("App", () => {
           expect(body).toEqual({
             msg: "Could not fetch comments. Article id provided not found",
           });
+        });
+    });
+  });
+
+  describe("POST - /api/articles/:article_id/comments", () => {
+    // Happy PATH 201 - Returns inserted object
+    it("Returns a 201 status code and a response object with a key of comment and the comment object that has been inserted", () => {
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send({ username: "butter_bridge", body: "This is a new comment" })
+        .expect(201)
+        .then(({ body }) => {
+          const { comment } = body;
+          expect(comment.article_id).toBe(2);
+          expect(comment.body).toBe("This is a new comment");
+          expect(comment.author).toBe("butter_bridge");
+          expect(comment.comment_id).toBe(19);
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+          });
+        });
+    });
+    // 400 - Invalid input. No body provided.
+    it("Returns a 400 status code and a response object with a key of msg and a string 'No body or username key provided in the body of the request' as value", () => {
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send({ username: "butter_bridge" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe(
+            "No body or username key provided in the body of the request"
+          );
+        });
+    });
+    // 400 - Invalid
+    it("Returns a 400 status code and a response object with a key of msg and a string 'Invalid input'", () => {
+      return request(app)
+        .post("/api/articles/monkey/comments")
+        .send({ username: "butter_bridge", body: "This is a new comment" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input");
+        });
+    });
+
+    // 404 - username not found
+    it("Returns a 404 status code and a response object with a key of msg and a string 'Not found' as value when enter a wrong username", () => {
+      return request(app)
+        .post("/api/articles/4/comments")
+        .send({ username: "Jorge", body: "This is a new comment" })
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Not found");
+        });
+    });
+    // 404 - article not found
+    it("Returns a 404 status code and a response object with a key of msg and a string 'Not found' as value when the entered a valid but wrong article ID", () => {
+      return request(app)
+        .post("/api/articles/4234234/comments")
+        .send({ username: "butter_bridge", body: "This is a new comment" })
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Not found");
         });
     });
   });
