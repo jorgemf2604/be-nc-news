@@ -38,15 +38,14 @@ describe("App", () => {
   });
 
   describe("GET api/articles", () => {
-    it("Should receive a 200 status and an object with a articles key and an array of object articles (sorted by its creation date) as a value.", () => {
+    it("Should receive a 200 status and an object with an articles key and an array of object articles (sorted desc by its creation date) as a value.", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
         .then(({ body }) => {
           const { articles } = body;
           expect(articles.length).toBe(12);
-          expect(articles).toBeSorted({ key: "created_at" });
-          expect(articles[6].comment_count).toBe(11);
+          expect(articles).toBeSortedBy("created_at", { descending: true });
           articles.forEach((article) => {
             expect(article).toMatchObject({
               author: expect.any(String),
@@ -59,6 +58,92 @@ describe("App", () => {
               comment_count: expect.any(Number),
             });
           });
+        });
+    });
+    it("200 - We can sort by another column (author, title, ...)", () => {
+      return request(app)
+        .get("/api/articles")
+        .query({ sort_by: "title" })
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(12);
+          expect(articles).toBeSortedBy("title", { descending: true });
+        });
+    });
+    it("200 - We can change the sorting order", () => {
+      return request(app)
+        .get("/api/articles")
+        .query({ sort_by: "article_id", order: "asc" })
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(12);
+          expect(articles).toBeSortedBy("article_id", { descending: false });
+        });
+    });
+    it("200 - We can filter by an specific topic", () => {
+      return request(app)
+        .get("/api/articles")
+        .query({ sort_by: "article_id", order: "asc", topic: "mitch" })
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(11);
+          expect(articles).toBeSortedBy("article_id", { descending: false });
+          articles.forEach((article) => {
+            expect(article).toMatchObject({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: "mitch",
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number),
+            });
+          });
+        });
+    });
+    it("200 - Empty happy path. E.g. When we filter by a valid topic but there are not articles with that topic", () => {
+      return request(app)
+        .get("/api/articles")
+        .query({ sort_by: "article_id", order: "asc", topic: "paper" })
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(0);
+          expect(body).toEqual({ articles: [] });
+        });
+    });
+    it("400 - Bad request: Invalid sort_by query", () => {
+      return request(app)
+        .get("/api/articles")
+        .query({ sort_by: "papaya", order: "asc", topic: "paper" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid sort query");
+        });
+    });
+    it("400 - Bad request: Invalid order query", () => {
+      return request(app)
+        .get("/api/articles")
+        .query({ sort_by: "article_id", order: "papaya", topic: "paper" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid order query");
+        });
+    });
+    it("404 - Topic not found", () => {
+      return request(app)
+        .get("/api/articles")
+        .query({ sort_by: "article_id", order: "asc", topic: "papaya" })
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Topic not found");
         });
     });
   });
