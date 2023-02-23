@@ -21,7 +21,7 @@
 <!-- ABOUT THE PROJECT -->
 <h2 id="about-the-project"> 🚧 About The Project</h2>
 <p>This is a project created for the Northcoders Bootcamp. The goal of this news API is to access application data programmatically. We are  trying to mimic the building of a real world backend service (such as reddit). This API will be used as the back-end for a future front end architecture.</p>
-<p><em>Link to the hosted version: <a href="https://test2-8rsd.onrender.com/api">live API</a></em></p>
+<p><em>Link to the hosted version: <a href="https://be-nc-news-oefr.onrender.com/api">live API</a></em></p>
 
 <img src="images/rainbow.png" alt="rainbow divider line" width="100%" height="10px">
 
