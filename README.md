@@ -1,37 +1,42 @@
 <!-- HEADER -->
-<img src="images/waves.png" alt="multicolor waves" width="100%" height="250px">
-<h1 style='color:tomato;font-size:40px;'>NC News API</h1>
+
+![multicolor-waves](./images/waves.png)
+
+# NC News API
 
 <!-- TABLE OF CONTENTS -->
-<h2 style='background-color:tomato;padding:5px 10px;border-radius:10px;text-shadow: 0 0 5px black;font-family:monospace'>📚 Table of Contents</h2>
 
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol style='list-style:none'>
-    <li><a href="#about-the-project"> 🚧 About The Project</a></li>
-    <li><a href="#testing"> 🕹️ Testing the Api </a></li>
-    <li><a href="#folder-structure"> 📁 Folder Structure</a></li>
-    <li><a href="#requirements"> 💿 Requirements</a></li>
-    <li><a href="#setting-up"> 🛠️ Setting up the project</a></li>
-  </ol>
-</details>
+## 📚 Table of Contents
 
-<img src="images/rainbow.png" alt="rainbow divider line" width="100%" height="10px">
+- 🚧 About The Project
+- 🕹️ Testing the Api
+- 📁 Folder Structure
+- 💿 Requirements
+- 🛠️ Setting up the project
+
+![divider](./images/rainbow.png)
 
 <!-- ABOUT THE PROJECT -->
-<h2 id="about-the-project"> 🚧 About The Project</h2>
-<p>This is a project created for the Northcoders Bootcamp. The goal of this news API is to access application data programmatically. We are  trying to mimic the building of a real world backend service (such as reddit). This API will be used as the back-end for a future front end architecture.</p>
-<p><em>Link to the hosted version: <a href="https://test2-8rsd.onrender.com/api">live API</a></em></p>
 
-<img src="images/rainbow.png" alt="rainbow divider line" width="100%" height="10px">
+## 🚧 About The Project
+
+This is a project created for the Northcoders Bootcamp. The goal of this news API is to access application data programmatically. We are trying to mimic the building of a real world backend service (such as reddit). This API will be used as the back-end for a future front end architecture.
+
+Link to the hosted version: https://be-nc-news-oefr.onrender.com/api
+
+![divider](./images/rainbow.png)
 
 <!-- Testing the API -->
-<h2 id="testing">🕹️ Testing the Api</h2>
-<p>You can find information about the endpoints and what they do in the endpoints.json file and the /api endpoint in the live API</p>
-<img src="images/rainbow.png" alt="rainbow divider line" width="100%" height="10px">
+
+## 🕹️ Testing the Api
+
+You can find information about the endpoints and what they do in the endpoints.json file and the /api endpoint in the live API
+
+![divider](./images/rainbow.png)
 
 <!-- FOLDER STRUCTURE -->
-<h2 id="folder-structure" style='font-family: monospace'> 📁 Folder Structure</h2>
+
+## 📁 Folder Structure
 
     . (root)
     │
@@ -98,13 +103,14 @@
     ├── node_modules (more files inside)
     ├── .husky (more files inside)
 
-<img src="images/rainbow.png" alt="rainbow divider line" width="100%" height="10px">
+![divider](./images/rainbow.png)
 
 <!-- PREREQUISITES -->
-<h2 id="requirements"> 💿 Requirements</h2>
 
-![made-with-node](https://img.shields.io/badge/Made%20with-Node-brightgreen?style=for-the-badge) <br>
-![build-with-express](https://img.shields.io/badge/Build%20with-Express-yellow?style=for-the-badge&logo=npm) <br>
+## 💿 Requirements
+
+![made-with-node](https://img.shields.io/badge/Made%20with-Node-brightgreen?style=for-the-badge)\
+![build-with-express](https://img.shields.io/badge/Build%20with-Express-yellow?style=for-the-badge&logo=npm)
 
 The following dependencies are used in this project. Yow will need to install them if you want to run and test the API locally:
 
@@ -125,12 +131,13 @@ This is a node application so you will need to install it if it is not already i
 
 The main dependencies are express as the main node framework, node-postgress (pg) to interact with the PostgreSQL database and dotenv to load environment variables from a .env file into process.env, you will need to create two .env files if you want to run the project locally (more of this in sections below).
 
-<img src="images/rainbow.png" alt="rainbow divider line" width="100%" height="10px">
+![divider](./images/rainbow.png)
 
 <!-- SETTING UP PROJECT -->
-<h2 id="setting-up">🛠️ Setting up the project</h2>
+
+## 🛠️ Setting up the project
+
 In case you want to run the API locally:
-<br />
 
 ### Clone the repo
 
@@ -146,7 +153,7 @@ npm install
 
 ### Create two new .env files
 
-You will need to create two .env files for your project: <mark>.env.test</mark> and <mark>.env.development</mark>. Into each, add <strong>PGDATABASE=<database_name_here></strong>, with the correct database name for that environment (see /db/setup.sql for the database names).
+You will need to create two .env files for your project: .env.test and .env.development. Into each, add PGDATABASE=<database_name_here> with the correct database name for that environment (see /db/setup.sql for the database names).
 
 ### Create local database
 
@@ -182,8 +189,8 @@ http://localhost:9090/api/articles/1
 
 or other endpoints.
 
-<img src="images/rainbow.png" alt="rainbow divider line" width="100%" height="10px">
+![divider](./images/rainbow.png)
 
 <!-- FOOTNOTE -->
-<br/>
-<i> 🎒 This was a project for the <a href="https://northcoders.com/">Northcoders Coding Bootcamp</a> (UK). Thank you to all the tutors for the feedback provided.<i>
+
+🎒 This was a project for the [Northcoders Coding Bootcamp](https://northcoders.com/) (UK). Thank you to all the tutors for the feedback provided.
