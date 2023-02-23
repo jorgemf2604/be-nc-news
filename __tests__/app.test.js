@@ -171,6 +171,29 @@ describe("App", () => {
           });
         });
     });
+    it("It should include a comment_count key", () => {
+      return request(app)
+        .get("/api/articles/3")
+        .expect(200)
+        .then(({ body }) => {
+          const { article } = body;
+          expect(article.title).toBe("Eight pug gifs that remind me of mitch");
+          expect(article.article_id).toBe(3);
+          expect(article.author).toBe("icellusedkars");
+          expect(article.comment_count).toBe(2);
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            body: expect.any(String),
+            comment_count: expect.any(Number),
+          });
+        });
+    });
     // 400 - Invalid input
     it("Should receive a 400 status code and an object with a key of msg and the string 'Invalid input as' value", () => {
       return request(app)
