@@ -148,9 +148,30 @@ describe("App", () => {
     });
   });
 
-  describe("GET /api/articles/:articleId", () => {
+  describe("GET /api/articles/:article_id", () => {
     // Happy path
-    it("Should receive a 200 status and an object with a key of articles and the specified article as value", () => {
+    it("Should receive a 200 status code and an object with a key of articles and the specified article as value", () => {
+      return request(app)
+        .get("/api/articles/3")
+        .expect(200)
+        .then(({ body }) => {
+          const { article } = body;
+          expect(article.title).toBe("Eight pug gifs that remind me of mitch");
+          expect(article.article_id).toBe(3);
+          expect(article.author).toBe("icellusedkars");
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            body: expect.any(String),
+          });
+        });
+    });
+    it("It should include a comment_count key", () => {
       return request(app)
         .get("/api/articles/3")
         .expect(200)
@@ -174,9 +195,9 @@ describe("App", () => {
         });
     });
     // 400 - Invalid input
-    it("Should receive a 400 status and an object with a key of msg and the string 'Invalid input' as value", () => {
+    it("Should receive a 400 status code and an object with a key of msg and the string 'Invalid input as' value", () => {
       return request(app)
-        .get("/api/articles/papaya")
+        .get("/api/articles/one")
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
@@ -184,9 +205,9 @@ describe("App", () => {
         });
     });
     // 404 - Article not found
-    it("Should receive a 404 status and an object with a key of msg and the string 'Article not found' as value", () => {
+    it("Should receive a 404 status code and an object with a key of msg and the string 'Article not found' as a value", () => {
       return request(app)
-        .get("/api/articles/1002")
+        .get("/api/articles/1213123")
         .expect(404)
         .then(({ body }) => {
           const { msg } = body;
@@ -194,51 +215,6 @@ describe("App", () => {
         });
     });
   });
-
-  // describe("GET /api/articles/:article_id", () => {
-  //   // Happy path
-  //   it("Should receive a 200 status code and an object with a key of articles and the specified article as value", () => {
-  //     return request(app)
-  //       .get("/api/articles/3")
-  //       .expect(200)
-  //       .then(({ body }) => {
-  //         const { article } = body;
-  //         expect(article.title).toBe("Eight pug gifs that remind me of mitch");
-  //         expect(article.article_id).toBe(3);
-  //         expect(article.author).toBe("icellusedkars");
-  //         expect(article).toMatchObject({
-  //           author: expect.any(String),
-  //           title: expect.any(String),
-  //           article_id: expect.any(Number),
-  //           topic: expect.any(String),
-  //           created_at: expect.any(String),
-  //           votes: expect.any(Number),
-  //           article_img_url: expect.any(String),
-  //           body: expect.any(String),
-  //         });
-  //       });
-  //   });
-  //   // 400 - Invalid input
-  //   it("Should receive a 400 status code and an object with a key of msg and the string 'Invalid input as' value", () => {
-  //     return request(app)
-  //       .get("/api/articles/one")
-  //       .expect(400)
-  //       .then(({ body }) => {
-  //         const { msg } = body;
-  //         expect(msg).toBe("Invalid input");
-  //       });
-  //   });
-  //   // 404 - Article not found
-  //   it("Should receive a 404 status code and an object with a key of msg and the string 'Article not found' as a value", () => {
-  //     return request(app)
-  //       .get("/api/articles/1213123")
-  //       .expect(404)
-  //       .then(({ body }) => {
-  //         const { msg } = body;
-  //         expect(msg).toBe("Article not found");
-  //       });
-  //   });
-  // });
 
   describe("GET /api/articles/:article_id/comments", () => {
     // Happy path
