@@ -434,4 +434,31 @@ describe("App", () => {
         });
     });
   });
+
+  describe("DELETE /api/comments/:comment_id", () => {
+    it("204 - Should delete the specified comment for the database and return no body for response", () => {
+      return request(app)
+        .delete("/api/comments/1")
+        .expect(204)
+        .then((response) => {
+          expect(response.body).toEqual({});
+        });
+    });
+    it("400 - Bad request: Invalid comment Id.", () => {
+      return request(app)
+        .delete("/api/comments/One")
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe("Invalid input");
+        });
+    });
+    it("404 - Not found: Valid comment Id, but no such id in comments", () => {
+      return request(app)
+        .delete("/api/comments/123123")
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe("Comment Id not found");
+        });
+    });
+  });
 });
