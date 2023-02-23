@@ -3,6 +3,7 @@ const app = require("../app.js");
 const testData = require("../db/data/test-data/index.js");
 const seed = require("../db/seeds/seed.js");
 const db = require("../db/connection.js");
+const endpoints_json = require("../endpoints.json");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -18,7 +19,17 @@ describe("App", () => {
         });
     });
   });
-
+  describe("GET /api", () => {
+    it("200 - Returns a JSON representation of all the available endpoints of the api", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({ body }) => {
+          const { endpoints } = body;
+          expect(endpoints).toEqual(endpoints_json);
+        });
+    });
+  });
   describe("GET api/topics", () => {
     it("Should receive a 200 status and an object with a topics key and an array of object topics as a value. Each topic will have the slug and description properties", () => {
       return request(app)
