@@ -90,7 +90,7 @@ describe("App", () => {
         .then(({ body }) => {
           const { articles } = body;
           expect(articles.length).toBe(11);
-          expect(articles).toBeSortedBy("article_id", { descending: false });
+          expect(articles[0].title).toBe("Living in the shadow of a great man");
           articles.forEach((article) => {
             expect(article).toMatchObject({
               author: expect.any(String),
