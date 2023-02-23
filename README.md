@@ -89,6 +89,13 @@ You can find information about the endpoints and what they do in the endpoints.j
     |     ├── topics-model.js
     |     ├── users-model.js
     |
+    ├── routes
+    |     ├── api-router.js
+    |     ├── articles-router.js
+    |     ├── comments-router.js
+    |     ├── topics-router.js
+    |     ├── users-router.js
+    |
     ├── .env-example
     ├── .env.test (you will have to create this file)
     ├── .env.develoment (you will have to create this file)
