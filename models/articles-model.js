@@ -44,22 +44,6 @@ const fetchAllArticles = async (
   return db.query(query).then((response) => response.rows);
 };
 
-// const fetchArticleById = (id) => {
-//   return db
-//     .query("SELECT * FROM articles WHERE article_id = $1", [id])
-//     .then((response) => response.rows)
-//     .then((articles) => {
-//       if (articles.length === 0) {
-//         return Promise.reject({
-//           status: 404,
-//           msg: "Article not found",
-//         });
-//       } else {
-//         return articles[0];
-//       }
-//     });
-// };
-
 const fetchArticleById = (id) => {
   return db
     .query(
