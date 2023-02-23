@@ -5,7 +5,8 @@ const {
 } = require("../models/articles-model.js");
 
 const getAllArticles = (req, res, next) => {
-  fetchAllArticles()
+  const { topic, sort_by, order } = req.query;
+  fetchAllArticles(sort_by, order, topic)
     .then((articles) => {
       res.status(200).send({ articles });
     })
