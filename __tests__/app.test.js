@@ -497,4 +497,71 @@ describe("App", () => {
         });
     });
   });
+
+  describe("PATCH /comments/:comment_id", () => {
+    it("Should receive a 200 status and an object with a comment key and the modified comment object as a value.", () => {
+      return request(app)
+        .patch("/api/comments/3")
+        .send({ inc_votes: 1000 })
+        .expect(200)
+        .then(({ body }) => {
+          const { comment } = body;
+          expect(comment.votes).toBe(1100);
+          expect(comment.article_id).toBe(1);
+          expect(comment.comment_id).toBe(3);
+          expect(comment.author).toBe("icellusedkars");
+          expect(comment.body).toBe(
+            "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works."
+          );
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            article_id: expect.any(Number),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          });
+        });
+    });
+    it("400 - Invalid input: the key 'inc_votes' is not included in the request body", () => {
+      return request(app)
+        .patch("/api/comments/3")
+        .send({})
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input. Votes is a not null key");
+        });
+    });
+    it("404 - Comment not found", () => {
+      return request(app)
+        .patch("/api/comments/323423")
+        .send({ inc_votes: 1000 })
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Comment not found");
+        });
+    });
+    it("400 - Bad request: the value of inc_votes is an invalid input", () => {
+      return request(app)
+        .patch("/api/comments/3")
+        .send({ inc_votes: "potato" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input");
+        });
+    });
+    it("400 - Bad request: the value the comment_id is an invalid input", () => {
+      return request(app)
+        .patch("/api/comments/potato")
+        .send({ inc_votes: "1" })
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid input");
+        });
+    });
+  });
 });

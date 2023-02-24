@@ -43,3 +43,28 @@ exports.eraseCommentById = (id) => {
       ]);
     });
 };
+
+exports.updateCommentById = (commentId, votesInc) => {
+  if (!votesInc) {
+    return Promise.reject({
+      status: 400,
+      msg: "Invalid input. Votes is a not null key",
+    });
+  }
+  return db
+    .query(
+      "UPDATE comments SET votes=votes + $1 WHERE comment_id=$2 RETURNING *;",
+      [votesInc, commentId]
+    )
+    .then((response) => response.rows)
+    .then((comments) => {
+      if (comments.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "Comment not found",
+        });
+      } else {
+        return comments[0];
+      }
+    });
+};
