@@ -11,8 +11,8 @@ const {
 
 articlesRouter.get("/", getAllArticles);
 articlesRouter.get("/:article_id", getArticleById);
+articlesRouter.patch("/:article_id", patchArticle);
 articlesRouter.get("/:article_id/comments", getCommentsByArticleId);
 articlesRouter.post("/:article_id/comments", postCommentOnArticle);
-articlesRouter.patch("/:article_id", patchArticle);
 
 module.exports = articlesRouter;

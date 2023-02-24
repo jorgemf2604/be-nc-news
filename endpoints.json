@@ -84,7 +84,7 @@
     "description": "serves an array of users",
     "queries": [],
     "exampleResponse": {
-      "users": [
+      "user": [
         {
           "username": "tickle122",
           "name": "Tom Tickle",
@@ -96,5 +96,31 @@
   "DELETE /api/comments/comment_id": {
     "description": "deletes the comment with the provided Id",
     "exampleResponse": "Responds with a 200 status code but no body is returned as response"
+  },
+  "GET /api/users/:username": {
+    "description": "serves the specified (by username) user",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "username": "grumpy19",
+        "name": "Paul Grump",
+        "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
+      }
+    }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "modifies the specified user (incrementing its votes) and returns the modified comment object",
+    "queries": [],
+    "exampleRequestBody": { "inc_votes": 10 },
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 2,
+        "body": "Nobis consequatur animi. Ullam nobis quaerat voluptates veniam.",
+        "article_id": 4,
+        "author": "grumpy19",
+        "votes": 17,
+        "created_at": "2020-01-01T15:02:00.000Z"
+      }
+    }
   }
 }

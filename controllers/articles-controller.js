@@ -2,6 +2,7 @@ const {
   fetchAllArticles,
   fetchArticleById,
   modifyArticle,
+  insertArticle,
 } = require("../models/articles-model.js");
 
 const getAllArticles = (req, res, next) => {
